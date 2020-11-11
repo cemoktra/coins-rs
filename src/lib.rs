@@ -3,6 +3,7 @@ pub mod amount;
 pub mod errors;
 pub mod traits;
 pub mod ecb;
+pub mod tax;
 
 #[macro_use]
 #[cfg(test)]
@@ -15,6 +16,7 @@ mod tests {
     use crate::traits::ExchangeRate;
     use crate::errors::Error;
     use crate::ecb::EuropeanCentralBank;
+    use crate::tax;
 
     #[test]
     fn test_currency_decimals() {
@@ -79,10 +81,10 @@ mod tests {
     }
 
     impl ExchangeRate for ExchangeRateErrorMock {
-      fn exchange_rate(self, _from: Currency, _to: Currency) -> Result<f64, Error>
-      {
-          Err(Error::CouldNotGetExchangeRate)
-      }
+        fn exchange_rate(self, _from: Currency, _to: Currency) -> Result<f64, Error>
+        {
+            Err(Error::CouldNotGetExchangeRate)
+        }
   }
 
     #[test]
@@ -99,9 +101,20 @@ mod tests {
 
     #[test]
     fn test_ecb_exchange_rate() {
-      let ecb = EuropeanCentralBank;
-      let rate = ecb.exchange_rate(Currency::EUR, Currency::JPY);
-      assert!(rate.is_ok());
-      assert_gt!(rate.unwrap(), 1.0);
+        let ecb = EuropeanCentralBank;
+        let rate = ecb.exchange_rate(Currency::EUR, Currency::JPY);
+        assert!(rate.is_ok());
+        assert_gt!(rate.unwrap(), 1.0);
+    }
+
+    #[test]
+    fn test_tax_add() {
+        let net_amount = Amount::new(500, Currency::EUR);
+        let gross_amount = tax::add_tax(net_amount, 0.16);
+        assert_eq!(580, gross_amount.amount);
+        let tax_amount = tax::get_tax(net_amount, 0.16);
+        assert_eq!(80, tax_amount.amount);
+        let net_amount = tax::remove_tax(gross_amount, 0.16);
+        assert_eq!(500, net_amount.amount);
     }
 }

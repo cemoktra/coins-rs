@@ -1,11 +1,11 @@
 [package]
-name = "rusty_coin"
+name = "coins-rs"
 version = "0.1.0"
 authors = ["cemoktra <b.schubert82@gmail.com>"]
 edition = "2018"
 description = "Currency calculations for rust"
 readme = "README.md"
-homepage = "https://github.com/cemoktra/rusty_state"
+homepage = "https://github.com/cemoktra/coins-rs"
 license = "MIT"
 keywords = ["currency", "monetary", "financial"]
 
