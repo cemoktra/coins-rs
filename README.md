@@ -1,4 +1,4 @@
-![CI](https://github.com/cemoktra/rusty_coin/workflows/CI/badge.svg)
+![CI](https://github.com/cemoktra/coins-rs/workflows/CI/badge.svg)
 
 
 # rusty_coin
